@@ -152,7 +152,6 @@ class Task extends Component {
             return (
                 <div className="loading">
                     <button className="loginBtn loginBtn--facebook" onClick={this.login}> Login with Facebook</button>
-                    <br/>
                     <button className="loginBtn loginBtn--google" onClick={this.login2}>Login with Google</button>
                 </div>
             )
