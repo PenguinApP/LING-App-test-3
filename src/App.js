@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Task from './Components/Task';
-import Facebook from './Components/Facebook';
-import Google from './Components/Google';
 
 class App extends Component {
   render() {

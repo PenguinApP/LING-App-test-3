@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import firebase, { auth, provider } from './config';
+import firebase, { auth, provider, provider2 } from './config';
 import './Task.css';
 
-class App extends Component {
+class Task extends Component {
     constructor() {
         super();
         this.state = {
@@ -15,8 +15,8 @@ class App extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.login = this.login.bind(this); // <-- add this line
-        this.logout = this.logout.bind(this); // <-- add this line
+        this.login = this.login.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
     handleChange(e) {
@@ -24,7 +24,7 @@ class App extends Component {
             [e.target.name]: e.target.value
         });
     }
-    
+
     handleSubmit(e) {
         e.preventDefault();
         const itemsRef = firebase.database().ref(this.state.user.displayName);
@@ -41,34 +41,8 @@ class App extends Component {
             startDate: '',
             endDate: ''
         });
-    }
-
-    logout() {
-        auth.signOut()
-            .then(() => {
-                this.setState({
-                    user: null
-                });
-            });
-    }
-    login() {
-        auth.signInWithPopup(provider)
-            .then((result) => {
-                const user = result.user;
-                this.setState({
-                    user
-                });
-            });
-    }
-
-    componentDidMount() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.setState({ user });
-            }
-        });
-        const itemsRef = firebase.database().ref('Panatpong Lertpattanachat');
-        itemsRef.on('value', (snapshot) => {
+        const itemsRef2 = firebase.database().ref(this.state.user.displayName);
+        itemsRef2.on('value', (snapshot) => {
             let items = snapshot.val();
             let newState = [];
             for (let item in items) {
@@ -86,17 +60,48 @@ class App extends Component {
         });
     }
 
-    render() {
-        return (
+    login = () => {
+        var that = this;
+        const result = auth.signInWithPopup(provider).then(function (result) {
+            var user = result.user;
+            console.log(user);
+            that.setState({ user: user });
+        }).catch(function (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+        });
+    }
+    login2 = () => {
+        var that = this;
+        const result = auth.signInWithPopup(provider2).then(function (result) {
+            var user = result.user;
+            console.log(user);
+            that.setState({ user: user });
+        }).catch(function (error) {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+        });
+    }
 
-            <div class="App-div.container">
-                <nav class="App-nav">
-                    <div className="App">
-                        {this.state.user ?
-                            <button onClick={this.logout}>Log Out</button>
-                            :
-                            <button onClick={this.login}>Log In</button>
-                        }
+    logout = () => {
+        var that = this;
+        auth.signOut().then(function () {
+            that.setState({ user: null });
+        }).catch(function (error) {
+        });
+    }
+    componentDidMount() {
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                this.setState({ user });
+            }
+        });
+    }
+    renderLoginButon() {
+        if (this.state.user) {
+            return (
+                <div class="App-div.container">
+                    <nav class="App-nav">
                         <section className="App-item">
                             <form onSubmit={this.handleSubmit}>
                                 <br /><br />
@@ -111,39 +116,56 @@ class App extends Component {
                                 <button>Save</button>
                             </form>
                             <form>
-                                <button>Cancel</button>
+                                <button onClick={this.logout}>Log Out</button>
                             </form>
+
                         </section>
-                    </div>
-                </nav>
-                <section className="display-item">
-                    <article className="App-article">
-                        <br /><br /><br />
-                        <h1>LING Project</h1>
-                        <br />
-                        <table id="t01">
-                            <tr>
-                                <th>Task Name</th>
-                                <th>Description</th>
-                                <th>Start</th>
-                                <th>End</th>
-                            </tr>
-                            {this.state.items.map((item) => {
-                                return (
-                                    <tr key={item.id}>
-                                        <td>{item.taskName}</td>
-                                        <td>{item.description}</td>
-                                        <td>{item.startDate}</td>
-                                        <td>{item.endDate}</td>
-                                    </tr>
-                                )
-                            })}
-                        </table>
-                    </article>
-                </section>
+                    </nav>
+                    <section className="display-item">
+                        <article className="App-article">
+                            <br /><br /><br />
+                            <h1>LING Project</h1>
+                            <br />
+                            <table id="t01">
+                                <tr>
+                                    <th>Task Name</th>
+                                    <th>Description</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                </tr>
+                                {this.state.items.map((item) => {
+                                    return (
+                                        <tr key={item.id}>
+                                            <td>{item.taskName}</td>
+                                            <td>{item.description}</td>
+                                            <td>{item.startDate}</td>
+                                            <td>{item.endDate}</td>
+                                        </tr>
+                                    )
+                                })}
+                            </table>
+                        </article>
+                    </section>
+                </div>
+            );
+        } else {
+            return (
+                <div className="App-buttonlogin loading">
+                    <button className="loginBtn loginBtn--facebook" onClick={this.login}> Login with Facebook</button>
+                    <button className="loginBtn loginBtn--google" onClick={this.login2}>Login with Google</button>
+                </div>
+            )
+        }
+    }
+
+    render() {
+        return (
+            <div className="App">
+                {this.renderLoginButon()}
             </div>
+
         );
     }
 }
 
-export default App;
+export default Task;
