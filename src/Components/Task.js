@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import firebase, { auth, provider, provider2 } from './config';
 import './Task.css';
+import logo from './Ling logo.png';
 
 class Task extends Component {
     constructor() {
@@ -97,6 +98,8 @@ class Task extends Component {
             }
         });
     }
+
+
     renderLoginButon() {
         if (this.state.user) {
             return (
@@ -104,7 +107,7 @@ class Task extends Component {
                     <nav class="App-nav">
                         <section className="App-item">
                             <form onSubmit={this.handleSubmit}>
-                                <br /><br />
+                                <br /><br /><br />
                                 <p>&nbsp;Task Name : <input type="text" name="taskName" placeholder="Task Name*" onChange={this.handleChange} value={this.state.taskName} /></p>
                                 <br /><br />
                                 <p>&nbsp;Description : <input type="text" name="description" placeholder="Description" onChange={this.handleChange} value={this.state.description} /></p>
@@ -113,12 +116,9 @@ class Task extends Component {
                                 <br /><br />
                                 <p>&nbsp;End : <input type="date" name="endDate" onChange={this.handleChange} value={this.state.endDate} /></p>
                                 <br /><br />
-                                <button>Save</button>
+                                <button className="buttonSave">Save</button>
                             </form>
-                            <form>
-                                <button onClick={this.logout}>Log Out</button>
-                            </form>
-
+                            <button className="buttonLogout" onClick={this.logout}>Log Out</button>
                         </section>
                     </nav>
                     <section className="display-item">
@@ -150,9 +150,13 @@ class Task extends Component {
             );
         } else {
             return (
-                <div className="loading">
-                    <button className="loginBtn loginBtn--facebook" onClick={this.login}> Login with Facebook</button>
-                    <button className="loginBtn loginBtn--google" onClick={this.login2}>Login with Google</button>
+                <div className="loading container wrapper">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <br />
+                    <p class="sansserif">Log in</p>
+                    <button className="loginBtn loginBtn--facebook" onClick={this.login}> Log in with Facebook</button>
+                    <br /> <br />
+                    <button className="loginBtn loginBtn--google" onClick={this.login2}>Log in with Google</button>
                 </div>
             )
         }
