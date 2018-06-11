@@ -32,10 +32,6 @@ table#t01 {
   background-color: #DFDFDF;
 }
 
-.App-buttonlogin {
-  text-align: center;
-}
-
 .loginBtn {
   box-sizing: border-box;
   position: relative;
