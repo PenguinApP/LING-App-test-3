@@ -4,8 +4,8 @@ import './Task.css';
 import logo from './Ling logo.png';
 
 class Task extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             taskName: '',
             description: '',
@@ -18,6 +18,7 @@ class Task extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
+
     }
 
     handleChange(e) {
@@ -60,6 +61,11 @@ class Task extends Component {
             });
         });
     }
+
+    removeItem(itemId) {
+        const itemRef = firebase.database().ref(`/Panatpong Lertpattanachat/${itemId}`);
+        itemRef.remove();
+      }
 
     login = () => {
         var that = this;
@@ -132,6 +138,7 @@ class Task extends Component {
                                     <th>Description</th>
                                     <th>Start</th>
                                     <th>End</th>
+                                    <th></th>
                                 </tr>
                                 {this.state.items.map((item) => {
                                     return (
@@ -140,6 +147,7 @@ class Task extends Component {
                                             <td>{item.description}</td>
                                             <td>{item.startDate}</td>
                                             <td>{item.endDate}</td>
+                                            <td><button onClick={() => this.removeItem(item.id)}>Remove Item</button></td>
                                         </tr>
                                     )
                                 })}
