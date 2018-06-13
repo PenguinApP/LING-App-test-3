@@ -4,21 +4,19 @@ import './Task.css';
 import logo from './Ling logo.png';
 
 class Task extends Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             taskName: '',
             description: '',
             startDate: '',
             endDate: '',
             items: [],
+            username: '',
             user: null
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.login = this.login.bind(this);
-        this.logout = this.logout.bind(this);
-
     }
 
     handleChange(e) {
@@ -29,43 +27,27 @@ class Task extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const itemsRef = firebase.database().ref(this.state.user.displayName);
+        const itemsRef = firebase.database().ref('item');
         const item = {
             taskName: this.state.taskName,
             description: this.state.description,
             startDate: this.state.startDate,
-            endDate: this.state.endDate
+            endDate: this.state.endDate,
+            user: this.state.user.displayName || this.state.user.email
         }
         itemsRef.push(item);
         this.setState({
             taskName: '',
             description: '',
             startDate: '',
-            endDate: ''
-        });
-        const itemsRef2 = firebase.database().ref(this.state.user.displayName);
-        itemsRef2.on('value', (snapshot) => {
-            let items = snapshot.val();
-            let newState = [];
-            for (let item in items) {
-                newState.push({
-                    id: item,
-                    taskName: items[item].taskName,
-                    description: items[item].description,
-                    startDate: items[item].startDate,
-                    endDate: items[item].endDate
-                });
-            }
-            this.setState({
-                items: newState
-            });
+            endDate: '',
         });
     }
 
     removeItem(itemId) {
-        const itemRef = firebase.database().ref(`/Panatpong Lertpattanachat/${itemId}`);
+        const itemRef = firebase.database().ref('item/' + itemId);
         itemRef.remove();
-      }
+    }
 
     login = () => {
         var that = this;
@@ -102,6 +84,42 @@ class Task extends Component {
             if (user) {
                 this.setState({ user });
             }
+            const itemsRef2 = firebase.database().ref('item');
+            itemsRef2.on('value', (snapshot) => {
+                let items = snapshot.val();
+                let newState = [];
+                for (let item in items) {
+                    newState.push({
+                        id: item,
+                        taskName: items[item].taskName,
+                        description: items[item].description,
+                        startDate: items[item].startDate,
+                        endDate: items[item].endDate,
+                        user: items[item].user
+                    });
+                }
+                this.setState({
+                    items: newState
+                });
+            });
+        });
+        const itemsRef = firebase.database().ref('item');
+        itemsRef.on('value', (snapshot) => {
+            let items = snapshot.val();
+            let newState = [];
+            for (let item in items) {
+                newState.push({
+                    id: item,
+                    taskName: items[item].taskName,
+                    description: items[item].description,
+                    startDate: items[item].startDate,
+                    endDate: items[item].endDate,
+                    user: items[item].user
+                });
+            }
+            this.setState({
+                items: newState
+            });
         });
     }
 
@@ -138,16 +156,16 @@ class Task extends Component {
                                     <th>Description</th>
                                     <th>Start</th>
                                     <th>End</th>
-                                    <th></th>
+                                    <th>Edit / Delete</th>
                                 </tr>
                                 {this.state.items.map((item) => {
                                     return (
                                         <tr key={item.id}>
-                                            <td>{item.taskName}</td>
-                                            <td>{item.description}</td>
-                                            <td>{item.startDate}</td>
-                                            <td>{item.endDate}</td>
-                                            <td><button onClick={() => this.removeItem(item.id)}>Remove Item</button></td>
+                                            {item.user === this.state.user.displayName || item.user === this.state.user.email ? <td>{item.taskName}</td> : null}
+                                            {item.user === this.state.user.displayName || item.user === this.state.user.email ? <td>{item.description}</td> : null}
+                                            {item.user === this.state.user.displayName || item.user === this.state.user.email ? <td>{item.startDate}</td> : null}
+                                            {item.user === this.state.user.displayName || item.user === this.state.user.email ? <td>{item.endDate}</td> : null}
+                                            {item.user === this.state.user.displayName || item.user === this.state.user.email ? <td><button>Edit</button><button onClick={() => this.removeItem(item.id)}>Delete</button></td> : null}
                                         </tr>
                                     )
                                 })}
