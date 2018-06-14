@@ -27,7 +27,7 @@ class Task extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const itemsRef = firebase.database().ref('item').orderByChild;
+        const itemsRef = firebase.database().ref('item');
         const item = {
             taskName: this.state.taskName,
             description: this.state.description,
@@ -64,12 +64,6 @@ class Task extends Component {
     removeItem(itemId) {
         const itemRef = firebase.database().ref('item/' + itemId);
         itemRef.remove();
-    }
-
-    replaceModalItem(item) {
-        this.setState({
-            requiredItem: item
-        });
     }
 
     login = () => {
@@ -158,7 +152,7 @@ class Task extends Component {
                                         {item.user === this.state.user.displayName || item.user === this.state.user.email ? <p>&nbsp;Start : <input key={item.id} type="date" name="startDate" onChange={this.handleChange} value={this.state.startDate} /></p> : null}
 
                                         {item.user === this.state.user.displayName || item.user === this.state.user.email ? <p>&nbsp;End : <input key={item.id} type="date" name="endDate" onChange={this.handleChange} value={this.state.endDate} /></p> : null}
-                                        {item.user === this.state.user.displayName || item.user === this.state.user.email ? <button onClick={() => this.handleUpdate(item.id)}>Update</button> : null}
+                                        {item.user === this.state.user.displayName || item.user === this.state.user.email ? <button onClick={() =>  this.handleUpdate(item.id) }>Update</button> : null}
                                     </form>
                                 )
                             })}
