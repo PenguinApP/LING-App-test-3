@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Task from './Components/Task';
 import Test from './Components/Test'
+import Upload from './Components/UploadData';
 
 class App extends Component {
   render() {
@@ -11,5 +12,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;

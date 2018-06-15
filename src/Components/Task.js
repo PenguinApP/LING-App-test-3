@@ -3,8 +3,9 @@ import firebase, { auth, provider, provider2 } from './config';
 import './Task.css';
 import logo from './Ling logo.png';
 import Popup from "reactjs-popup";
-import './Popup.css'
-import './Delete.css'
+import './Popup.css';
+import './Delete.css';
+import Upload from './UploadData';
 
 class Task extends Component {
     constructor(props) {
@@ -159,6 +160,7 @@ class Task extends Component {
         if (this.state.user) {
             return (
                 <div class="App-div.container">
+                    <Upload/>
                     <nav class="App-nav">
                         <section className="App-item">
                             <form onSubmit={this.handleSubmit}>
