@@ -20,27 +20,15 @@ class Edit extends Component {
             endDate: nextProps.endDate
         });
     }
-
-    taskHandler(e) {
-        this.setState({ taskName: e.target.value });
-    }
-
-    desHandler(e) {
-        this.setState({ description: e.target.value });
-    }
-
-    startHandler(e) {
-        this.setState({ startDate: e.target.value });
-    }
-
-    endHandler(e) {
-        this.setState({ endDate: e.target.value });
+    handleChange(e) {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
     }
 
     handleSave() {
-        
-        const item = this.state;
-        this.props.saveModalDetails(item)
+        const itemId = this.state;
+        this.props.handleUpdate(itemId)
     }
 
     render() {
@@ -54,12 +42,14 @@ class Edit extends Component {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div className="modal-body">
-                            <p><span className="modal-lable">Task Name : </span><input value={this.state.taskName} onChange={(e) => this.taskHandler(e)} /></p>
-                            <p><span className="modal-lable">Description : </span><input value={this.state.description} onChange={(e) => this.desHandler(e)} /></p>
-                            <p><span className="modal-lable">Start : </span><input value={this.state.startDate} onChange={(e) => this.startHandler(e)} /></p>
-                            <p><span className="modal-lable">End : </span><input value={this.state.endDate} onChange={(e) => this.endHandler(e)} /></p>
-                        </div>
+                                <div className="modal-body" key={item.id}>
+                                    {item.user === this.state.user.displayName || item.user === this.state.user.email ? <p><span className="modal-lable">Task Name : </span><input value={this.state.taskName} onChange={(e) => this.handleChange(e)} /></p> : null}
+                                    {item.user === this.state.user.displayName || item.user === this.state.user.email ? <p><span className="modal-lable">Description : </span><input value={this.state.description} onChange={(e) => this.handleChange(e)} /></p> : null}
+                                    {item.user === this.state.user.displayName || item.user === this.state.user.email ? <p><span className="modal-lable">Start : </span><input value={this.state.startDate} onChange={(e) => this.handleChange(e)} /></p> : null}
+                                    {item.user === this.state.user.displayName || item.user === this.state.user.email ? <p><span className="modal-lable">End : </span><input value={this.state.endDate} onChange={(e) => this.handleChange(e)} /></p> : null}
+                                </div>
+                            )
+                        })}
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => { this.handleSave() }}>Save changes</button>

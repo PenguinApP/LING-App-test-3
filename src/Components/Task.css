@@ -10,6 +10,10 @@
   padding: 1em;
 }
 
+.App-nav2 {
+  text-align: center
+}
+
 .App-article {
   margin-left: 30%;
   border-left: 0px solid #A0A0A0;

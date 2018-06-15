@@ -9,7 +9,9 @@
     "react-dom": "^16.4.0",
     "react-facebook-login": "^4.0.1",
     "react-google-login-component": "^0.9.3",
-    "react-scripts": "1.1.4"
+    "react-popup": "^0.9.3",
+    "react-scripts": "1.1.4",
+    "reactjs-popup": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
